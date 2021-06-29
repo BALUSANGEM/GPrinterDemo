@@ -137,6 +137,7 @@ public class DeviceConnFactoryManager {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            Log.d(TAG, " Got PrinterCommand handleMessage: " + msg.what + " send command is: " + sendCommand);
             switch (msg.what) {
                 case READ_DATA:
                     int cnt = msg.getData().getInt(READ_DATA_CNT); //数据长度 >0;

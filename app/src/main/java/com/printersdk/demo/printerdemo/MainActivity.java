@@ -841,6 +841,7 @@ public class MainActivity extends AppCompatActivity {
         threadPool.addTask(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, " Got checkForPending: run");
                 if (DeviceConnFactoryManager.getDeviceConnFactoryManagers()[id] == null ||
                         !DeviceConnFactoryManager.getDeviceConnFactoryManagers()[id].getConnState()) {
                     mHandler.obtainMessage(CONN_PRINTER).sendToTarget();
@@ -852,18 +853,22 @@ public class MainActivity extends AppCompatActivity {
                     scheduledExecutorService.schedule(threadFactoryBuilder.newThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!stack.isEmpty()) {
+                            while (!stack.isEmpty()){
                                 Pair<String, Boolean> pair = stack.pop();
                                 sendLabel(pair.first, pair.second);
-                            } else {
-                                printStart = false;
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this, "All are printed!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
                             }
+//                            if (!stack.isEmpty()) {
+//                                Pair<String, Boolean> pair = stack.pop();
+//                                sendLabel(pair.first, pair.second);
+//                            } else {
+//                                printStart = false;
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Toast.makeText(MainActivity.this, "All are printed!", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
+//                            }
                         }
                     }),1000, TimeUnit.MILLISECONDS);
                 } else {
@@ -1271,6 +1276,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case ACTION_QUERY_PRINTER_STATE: {
+                    Log.d(TAG, " Got ACTION_QUERY_PRINTER_STATE: " + printStart);
                     if (printStart) {
                         checkForPending();
                     }
