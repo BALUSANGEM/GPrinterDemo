@@ -192,20 +192,27 @@ public class DeviceConnFactoryManager {
                             currentPrinterCommand = PrinterCommand.TSC;
                             sendStateBroadcast(CONN_STATE_CONNECTED);
                         } else {
+                            Log.d(TAG," Priting label handler command is tsc cnt: " + cnt);
                             if (cnt == 1) {//查询打印机实时状态
+                                Log.d(TAG," Priting label handler command is tsc cnt is One");
                                 if ((buffer[0] & TSC_STATE_PAPER_ERR) > 0) {//缺纸
+                                    Log.d(TAG," Priting label handler command str_printer_out_of_paper");
                                     status += " " + App.getContext().getString(R.string.str_printer_out_of_paper);
                                 }
                                 if ((buffer[0] & TSC_STATE_COVER_OPEN) > 0) {//开盖
+                                    Log.d(TAG," Priting label handler command str_printer_open_cover");
                                     status += " " + App.getContext().getString(R.string.str_printer_open_cover);
                                 }
                                 if ((buffer[0] & TSC_STATE_ERR_OCCURS) > 0) {//打印机报错
+                                    Log.d(TAG," Priting label handler command str_printer_error");
                                     status += " " + App.getContext().getString(R.string.str_printer_error);
                                 }
                                 System.out.println(App.getContext().getString(R.string.str_state) + status);
                                 String mode = App.getContext().getString(R.string.str_printer_printmode_tsc);
+                                Log.d(TAG," Priting label handler command Showing toast print mode : " + mode + " status: " + status);
                                 Utils.toast(App.getContext(), mode + " " + status);
                             } else {//打印机状态查询
+                                Log.d(TAG," Priting label handler command is tsc cnt is NOT One send broadcast action query printer state");
                                 Intent intent = new Intent(ACTION_QUERY_PRINTER_STATE);
                                 intent.putExtra(DEVICE_ID, id);
                                 App.getContext().sendBroadcast(intent);
